@@ -1,0 +1,2 @@
+// © Om Kanabar 2025.
+// See more info in the LICENSE file.
