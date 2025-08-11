@@ -9,11 +9,20 @@ html, body{
 }
 
 
+#s1, #s2, #s3{
+    transition: 0.2s ease;
+}
+
+.s-hidden{
+    opacity: 0;
+}
+
 main{
     display: flex;
     flex-direction: column;
     justify-content: center;
     height: 75vh;
+    width: 100vw;
 }
 
 h1, h2{
@@ -48,45 +57,20 @@ noscript div{
 }
 
 .hidden{
-    overflow: hidden;
-    display: none;
-    color: transparent;
-    background-color: transparent;
-    x: -999999px;
-    y: -999999px;
+    overflow: hidden !important;
+    display: none !important;
+    x: 999999;
+    y: 999999;
     height: 1px;
     width: 1px;
-    font-size: 1px;
+    font-size: 1px !important;
+    color: transparent !important;
+
 }
 
-.mobile-warning{
-    overflow: hidden;
-    display: none;
-    color: transparent;
-    background-color: transparent;
-    x: -999999px;
-    y: -999999px;
-    height: 1px;
-    width: 1px;
-    font-size: 1px;
-}
-
-@media (max-width: 768px) {
-    main {
-        display: none;
-    }
-    .mobile-warning {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        width: 100vw;
-        height: 100vh;
-        background-color: #6a0f14;
-        color: #ededed;
-        font-size: 1.25em;
-        font-weight: 500;
-        padding: 1rem;
-        box-sizing: border-box;
-    }
+.b-box{
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    justify-content: center;
 }
