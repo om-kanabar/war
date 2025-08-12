@@ -6,23 +6,28 @@ html, body{
     width: 100%;
     height: 100%;
     color: rgb(232, 232, 232);
+    overflow-y: auto;
 }
 
 
 #s1, #s2, #s3{
     transition: 0.2s ease;
+    overflow-y: auto !important;
 }
 
 .s-hidden{
     opacity: 0;
 }
 
-main{
+main {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    height: 75vh;
+    justify-content: flex-start;  
+    align-items: center;          
+    min-height: 75vh;           
     width: 100vw;
+    overflow-y: auto;            
+    padding-top: 2rem;   
 }
 
 h1, h2{
@@ -31,8 +36,10 @@ h1, h2{
     font-family: 'Bebas Neue', sans-serif;
 }
 
-h1{
-    font-size: 120px;
+h1 {
+    font-size: clamp(5rem, 10vw, 6rem); /* responsive size from 2rem up to 6rem */
+    line-height: 1.1;
+    margin: 0.5em 0;
 }
 
 noscript{
@@ -73,4 +80,95 @@ noscript div{
     flex-direction: row;
     width: 100vw;
     justify-content: center;
+}
+
+.change{
+    background-color: #6a0f14;
+    color: #ededed;
+    font-family: 'Mozilla Text', sans-serif;
+    transition: 0.2s ease;
+    border-radius: 0px;
+    border-width: 0px;
+    cursor: pointer;
+}
+
+.change:focus{
+    background-color: #6a0f14;
+    color: #ededed;
+    border-radius: 1px;
+    border-width: 1px;
+    border-color: #ff1a1a;
+}
+
+.change:hover,
+.change:hover::after{
+    background-color: #450b0e;
+    color: #ededed;
+    border-radius: 0px;
+    border-width: 0px;
+}
+
+.change:active{
+    background-color: #450b0e !important;
+    color: #ededed;
+    border-radius: 0px;
+    border-width: 0px;
+}
+
+.d-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80vw;
+    padding: 0 1rem;
+    margin: 0 auto;
+    height: auto;
+    gap: 1rem;
+}
+
+.d-box form {
+    margin-top: 1rem;
+    align-self: flex-start;
+}
+
+.disclaimer p {
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    text-align: left;
+    margin: 0 auto;
+    line-height: 1.5;
+    max-width: 600px;
+}
+
+.disclaimer strong{
+    font-weight: 900;
+}
+
+.disclaimer a{
+    color: white;
+    transition: 0.2s ease;
+}
+
+.disclaimer a:hover{
+    color: rgb(175, 175, 175);
+}
+
+.disclaimer span{
+    color: #ff1a1a;
+}
+
+#home{
+    width: 20vw;
+    text-decoration: underline;
+}
+
+.t-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80vw;
+    padding: 0 1rem;
+    margin: 0 auto;
+    height: auto;
+    gap: 1rem;
 }
