@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Contact - War</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Mozilla+Text:wght@200..700&family=Oswald:wght@200..700&display=swap" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+    <!-- Your site stylesheet -->
+    <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+    <main class="container my-5">
+        <h1 class="mb-4">Contact Me</h1>
+         <form id="contactForm" class="w-100 w-md-50 mx-auto" action="https://formsubmit.co/e0459f877d74bc51cf22e24a45fd2a74" method="POST" class="needs-validation" novalidate="">
+            <div class="mb-3">
+                <label for="name" class="form-label fw-semibold">Name</label>
+                <input type="text" id="name" name="name" class="form-control" placeholder="Your name" required />
+                <div class="invalid-feedback">Please enter your name.</div>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label fw-semibold">Email</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="name@example.com" required />
+                <div class="invalid-feedback">Please enter a valid email address.</div>
+            </div>
+            <div class="mb-3">
+                <label for="subject" class="form-label fw-semibold">Subject</label>
+                <input type="text" id="subject" name="subject" class="form-control" placeholder="Considering the devastation that would be visited upon all mankind by a nuclear war" required />
+                <div class="invalid-feedback">Please enter a subject.</div>
+            </div>
+            <div class="mb-3 d-none">
+                <label for="website">Website</label>
+                <input type="text" id="website" name="website" autocomplete="off" />
+            </div>
+            <div class="mb-3">
+                <label for="message" class="form-label fw-semibold">Message</label>
+                <textarea id="message" name="message" rows="5" class="form-control" placeholder="Whereas recognition of the inherent dignity and of the equal and inalienable rights of all members of the human family is the foundation of freedom, justice and peace in the world," required></textarea>
+                <div class="invalid-feedback">Please enter a message.</div>
+            </div>
+            <input type="hidden" name="_template" value="box">  
+            <input type="hidden" name="_subject" value="">
+            <button type="submit" class="btn btn-primary px-4">Send</button>
+        </form>
+    </main>
+
+    <script>
+        // Basic form validation to prevent submit if invalid and honeypot check
+        (function() {
+            'use strict';
+            const form = document.getElementById('contactForm');
+            form.addEventListener('submit', function(event) {
+                // Honeypot check
+                var websiteField = document.getElementById('website');
+                if (websiteField && websiteField.value) {
+                    event.preventDefault();
+                    // silently return, do nothing
+                    return;
+                }
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        })();
+        document.addEventListener("DOMContentLoaded", function () {
+            const visibleSubject = document.getElementById("subject");
+            const hiddenSubject = document.querySelector("input[name='_subject']");
+
+            if (visibleSubject && hiddenSubject) {
+                visibleSubject.addEventListener("input", function () {
+                    hiddenSubject.value = visibleSubject.value;
+                });
+            }
+        });
+    </script>
+</body>
+</html>
