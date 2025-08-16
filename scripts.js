@@ -2,12 +2,14 @@
 // See more info in the LICENSE file.
 
 let debug;
+let param;
 
 document.addEventListener("DOMContentLoaded", () => {
     debug = new Debug();
+    param = new Param();
     debug.showButton();
     functionLoad();
-    // Call load() only if debug mode is NOT enabled
+    // Calls load() only if debug mode is NOT enabled
     if (!debug.enabled) {
         load();
     } else {
@@ -70,10 +72,7 @@ function h(){
 let seed;
 
 function pause(ms) {
-    const params = new URLSearchParams(window.location.search);
-    if (params.has('time')) {
-        console.log(`[TIME] Pausing for ${ms} ms`);
-    }
+    param.log("time", "TIME", "Paused for ", `${ms}`, "ms");
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
@@ -90,8 +89,10 @@ async function load() {
     document.querySelector("main").classList.remove("s-hidden");
 }
 
+let title;
+
 document.getElementById('genderButton').addEventListener('click', function() {
-    const title = document.getElementById('titleSelect').value;
+    title = document.getElementById('titleSelect').value;
     gameStart()
 });
 
@@ -121,6 +122,7 @@ async function changeScene(id1, id2, changeTime = 500) {
 
 async function gameStart(){
     changeScene("presInfo", "wake")
+    debug.changeSceneRight();
 }
 
 class Debug {
@@ -184,4 +186,46 @@ class Debug {
             if (btnLeft && btnRight) document.getElementById("debugBtns").classList.remove("hidden");
         }
     }
+}
+
+class Param {
+    constructor() {
+        this.params = new URLSearchParams(window.location.search);
+    }
+
+    /**
+        * Logs a message to the console if a specific URL parameter is present.
+        * - If the parameter exists with no value (e.g., ?time), it logs.
+        * - If the parameter exists with value "true" (e.g., ?time=true), it logs.
+        * - Otherwise, it does nothing (blank by default).
+        * @param {string} param The name of the URL parameter to check
+        * @param {string} prefix A prefix tag shown in the console log
+        * @param {string} message The main message to log
+        * @param {string} [var1=""] An optional variable or string to append
+        * @param {string} [message2=""] An optional second message to append
+    */
+
+    log(param, prefix, message, var1 = "", message2 = "") {
+        if (!this.params.has(param)) return; // no param → blank by default
+
+        const actualValue = this.params.get(param);
+
+        if (actualValue === "" || actualValue === null) {
+            console.log(`[${prefix}] ${message}${var1}${message2}`);
+            return;
+        }
+
+        if (actualValue === "true") {
+            console.log(`[${prefix}] ${message}${var1}${message2}`);
+        }
+    }
+    check(param, value = null) {
+        if (!this.params.has(param)) return false;
+        if (value === null) return true;
+        return this.params.get(param) === value;
+    }
+}
+
+async function actualStart() {
+    
 }
