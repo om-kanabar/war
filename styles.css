@@ -1,2 +1,153 @@
 /* © Om Kanabar 2025.
 See more info in the LICENSE file. */
+
+html, body{
+    background-color: #191919;
+    width: 100%;
+    height: 100%;
+    color: rgb(232, 232, 232);
+    overflow-y: auto;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  
+    align-items: center;          
+    min-height: 75vh;           
+    width: 100vw;
+    overflow-y: auto;            
+    padding-top: 2rem;
+    transition: 0.2s ease !important;  
+}
+
+h1, h2{
+    text-align: center;
+    color: #ff1a1a;
+    font-family: 'Bebas Neue', sans-serif;
+}
+
+h1 {
+    font-size: clamp(5rem, 10vw, 6rem);
+    margin: 0.5em 0;
+}
+
+noscript{
+    display: flex;
+    flex-direction: column;
+}
+
+noscript div{
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    background-color: #6a0f14;
+    color: #ededed;
+    font-size: 1.25em;
+    font-weight: 500;
+    order: -1;
+}
+
+.s-hidden{
+    opacity: 0;
+    transition: 0.2s ease;
+}
+
+.hidden{
+    overflow: hidden !important;
+    display: none !important;
+    x: 999999;
+    y: 999999;
+    height: 1px;
+    width: 1px;
+    font-size: 1px !important;
+    color: transparent !important;
+
+}
+
+#presInfo{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+}
+
+#loadScreen{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    background-color: #000;
+    color: #ededed !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#loadScreen h1{
+    text-align: center;
+    color: #ededed;
+    font-family: 'Mozilla Text', sans-serif;
+}
+
+#loadScreen h1 span{
+    font-family: 'Cal Sans', sans-serif;
+}
+
+select{
+    font-family: 'Mozilla Text', sans-serif !important;
+}
+
+#genderButton{
+    background-color: #6a0f14;
+    color: #ededed;
+    font-family: 'Mozilla Text', sans-serif;
+    transition: 0.2s ease;
+    border-radius: 0px;
+    border-width: 0px;
+    cursor: pointer;
+}
+
+#genderButton:focus{
+    background-color: #6a0f14;
+    color: #ededed;
+    border-radius: 1px;
+    border-width: 1px;
+    border-color: #ff1a1a;
+}
+
+#genderButton:hover,
+#genderButton:hover::after{
+    background-color: #450b0e;
+    color: #ededed;
+    border-radius: 0px;
+    border-width: 0px;
+}
+
+#genderButton:active{
+    background-color: #450b0e !important;
+    color: #ededed;
+    border-radius: 0px;
+    border-width: 0px;
+}
+
+#work{
+    transition: 0.2s ease;
+}
+
+#sceneLeft{
+    position: fixed; 
+    bottom: 1rem;  
+    left: 1rem;   
+    z-index: 999999999; 
+}
+
+#sceneRight {
+    position: fixed; 
+    bottom: 1rem; 
+    right: 1rem; 
+    z-index: 999999999;
+}

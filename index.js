@@ -2,17 +2,23 @@
 // See more info in the LICENSE file.
 
 document.addEventListener("DOMContentLoaded", () => {
+    clearStorageIfNew();
+    checkStarted();
+    tos()
     document.querySelector("main").classList.remove("hidden");
+});
+
+function pause(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function tos(){
     const accepted = localStorage.getItem("tosAccepted");
     if (accepted === "true") {
         changeScene()
     } else {
         document.querySelector("main").classList.remove("hidden");
     }
-});
-
-function pause(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 let scene = 0;
@@ -93,4 +99,26 @@ checkbox.addEventListener('change', () => {
 function acceptTOS() {
     localStorage.setItem("tosAccepted", "true");
     changeScene(); // move to the next part of the game
+}
+
+let startCheck;
+
+function start(){
+    startCheck = 1;
+    localStorage.setItem('startCheck', startCheck);
+    window.location.href = "game.html";
+}
+
+function checkStarted(){
+    startCheck = localStorage.getItem('startCheck');
+    if (startCheck == 1){
+        window.location.href = "game.html"
+    };
+}
+
+function clearStorageIfNew() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('new')) {
+        localStorage.clear();
+    }
 }
