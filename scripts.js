@@ -71,8 +71,8 @@ let seed;
 
 function pause(ms) {
     const params = new URLSearchParams(window.location.search);
-    if (debug.enabled && params.has('time')) {
-        debug.log(`Pausing for ${ms} ms`);
+    if (params.has('time')) {
+        console.log(`[TIME] Pausing for ${ms} ms`);
     }
     return new Promise(resolve => setTimeout(resolve, ms));
 }
