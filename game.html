@@ -46,12 +46,26 @@ See more info in the LICENSE file.
                     <option>Ms. President</option>
                     <option>Mx. President</option>
                 </select>
-                
             </form>
             <button id="genderButton" type="button" class="btn btn-primary mt-3">Next</button>
         </h1>
     </main>
-    <div id="wake" class="hidden full" data-scene="2">
+    <!--
+    ID naming scheme for subtitles:
+    st-[parentScene]-[subtitleIndex]-[animationType]-[lineCount]-[durationMs]-[pauseMs]
+
+    Example: st-2-0-t-1
+    - st: subtitle
+    - 2: parent data-scene = 2
+    - 0: subtitle number inside the parent scene
+    - t: animation type (e.g., typewriter)
+    - 1: number of lines
+    -->
+    <div id="wake" class="hidden full trans" data-scene="2">
+        <div id="bx-2-0-t-1" class="hidden bx">
+            <p id="st-2-0-t-1" class="st" data-text="${showTitle()}?" data-time="1500-1000"></p>
+            <span id="f-2-0-t-1" class="transparent inline f"></span>
+        </div> 
     </div>
     <div class="hidden" data-scene="3">
         <h1>Work 2</h1>

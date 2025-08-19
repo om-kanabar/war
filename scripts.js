@@ -1,13 +1,11 @@
 // © Om Kanabar 2025.
 // See more info in the LICENSE file.
-
+/** @type {Debug} */
 let debug;
+/** @type {Param} */
 let param;
 
 document.addEventListener("DOMContentLoaded", () => {
-    debug = new Debug();
-    param = new Param();
-    debug.showButton();
     functionLoad();
     // Calls load() only if debug mode is NOT enabled
     if (!debug.enabled) {
@@ -18,7 +16,10 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function functionLoad(){
-    setSeed()
+    debug = new Debug();
+    param = new Param();
+    debug.showButton();
+    setSeed();
 }
 
 function randint(min, max) {
@@ -76,6 +77,23 @@ function pause(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+async function checkElementId(id, prefix, maxAttempts = 5, interval = 50) {
+    const fullId = `${prefix}${id}`;
+    let elem = document.getElementById(fullId);
+    let attempt = 0;
+    while (!elem && attempt < maxAttempts) {
+        debug.log(`[DEBUG checkElementId] Attempt ${attempt + 1} to find "${fullId}"`);
+        await pause(interval);
+        elem = document.getElementById(fullId);
+        attempt++;
+    }
+    if (!elem) {
+        throw new Error(`[CHECK ELEMENT] Element with ID "${fullId}" not found after ${maxAttempts} attempts.`);
+    }
+    debug.log(`[DEBUG checkElementId] Found element "${fullId}" on attempt ${attempt}`);
+    return elem;
+}
+
 
 async function load() {
     document.getElementById("loadScreen").classList.replace("hidden", "s-hidden");
@@ -113,16 +131,17 @@ async function changeScene(id1, id2, changeTime = 500) {
     const elem1 = document.getElementById(id1);
     const elem2 = document.getElementById(id2);
     elem1.classList.add("s-hidden");
-    await pause(changeTime);
+    await pause(200);
     elem1.classList.replace("s-hidden", "hidden");
     elem2.classList.replace("hidden", "s-hidden");
-    await pause(200);
+    await pause(changeTime);
     elem2.classList.remove("s-hidden");
 }
 
 async function gameStart(){
     changeScene("presInfo", "wake")
     debug.changeSceneRight();
+    actualStart();
 }
 
 class Debug {
@@ -134,8 +153,22 @@ class Debug {
         if (this.enabled) this.setupButtons();
     }
 
-    log(message) {
-        if (this.enabled) console.log("[DEBUG]", message);
+    /**
+     * Logs a debug message if debug mode is enabled.
+     * @param {any} message Main message to log
+     * @param {any} var1 Optional extra variable
+     * @param {any} var2 Optional extra variable
+     * @param {any} message2 Optional second message
+     * @param {any} message3 Optional third message
+     */
+    log(message, var1 = "", var2 = "", message2 = "", message3 = "") {
+        if (this.enabled) console.log("[DEBUG]", `${message}${var1}${message2}${var2}${message3}`);
+    }
+
+    error(message) {
+        if (this.enabled) {
+            console.log(`%c[ERROR] ${message}`, "color: #ff4444ff; font-weight: bold;");
+        }
     }
 
     async changeSceneRight() {
@@ -227,5 +260,128 @@ class Param {
 }
 
 async function actualStart() {
-    
+    const wake = document.getElementById("wake");
+    await pause(1000);
+    subtitle("2-0-t-1");
+}
+
+/*
+ID naming scheme for subtitles:
+st-[parentScene]-[subtitleIndex]-[animationType]-[lineCount]
+
+Example: 2-0-t-1
+- 2: parent data-scene = 2
+- 0: subtitle number inside the parent scene
+- t: animation type (e.g., typewriter)
+- 1: number of lines
+*/
+
+/**
+ * Finds a subtitle <p> by id string and converts its ID into an array
+ * @param {string} id - The id string of the subtitle
+ * @returns {Array<string>} Array of ID parts, or empty array if not found */
+
+async function subtitle(id) {
+    const pElem = await checkElementId(id, "st-");
+    if (!pElem) {
+        throw new Error(`[SUBTITLE] Subtitle with id "${id}" does not exist in the DOM.`);
+    } 
+    const stId = id.split("-");
+    // bx-2-0-t-1
+    const pBoxId = `bx-${id}`
+    const pBox = await checkElementId(id, "bx-");
+    if(!pBox){
+        throw new Error(`[SUBTITLE] Subtitle box not found for ID "st-${id}". Expected element ID: "${pBoxId}", but none was found.`);
+    }
+    const fBoxId = `f-${id}`;
+    const fBox = await checkElementId(id, "f-");
+    if(!fBox){
+        throw new Error(`[SUBTITLE] fBox not found for ID "st-${id}". Expected element ID: "${fBoxId}", but none was found.`);
+    }
+    if (!validateSubtitleId(id)) return;
+    let textData = pElem.dataset.text || "";
+    textData = textData.replace(/\$\{showTitle\(\)\}/g, showTitle());
+    const textArray = Array.from(textData);
+
+    // Read duration and pause from data-time attribute
+    let duration = 1000;
+    let pauseTime = 2500;
+    if (pElem.dataset.time) {
+        const match = pElem.dataset.time.match(/^(\d+)-(\d+)$/);
+        if (match) {
+            duration = parseInt(match[1], 10);
+            pauseTime = parseInt(match[2], 10);
+        } else {
+            debug.error(`[SUBTITLE] Invalid data-time format "${pElem.dataset.time}". Expected format: two numbers separated by a dash, e.g. "1000-2500"`);
+            throw new Error(`[SUBTITLE] Invalid data-time format "${pElem.dataset.time}".`);
+        }
+    }
+    if (stId[2] === "t") {
+        typeWriterAnim(id, textArray, duration, pauseTime);
+    }
+}
+
+/**
+ * Validates a subtitle ID string.
+ * @param {string} id - The subtitle's id
+ * @returns {boolean} - True if valid, false if errors found
+ */
+function validateSubtitleId(id) {
+    const stId = id.split("-");
+    if (stId.length !== 4) {
+        throw new Error(`[SUBTITLE] Expected 5 segments in ID, got ${stId.length}`);
+    }
+    if (isNaN(parseInt(stId[0], 10))) {
+        throw new Error(`[SUBTITLE] Invalid parent scene index: "${stId[1]}"`);
+    }
+    if (isNaN(parseInt(stId[1], 10))) {
+        throw new Error(`[SUBTITLE] Invalid subtitle index: "${stId[1]}"`);
+    }
+    const allowedAnimations = ["t"];
+        if (!allowedAnimations.includes(stId[2])) {
+        throw new Error(`[SUBTITLE] Invalid animation type "${stId[2]}". Allowed: ${allowedAnimations.join(", ")}`);
+    }
+    if (isNaN(parseInt(stId[3], 10))) {
+        throw new Error(`[SUBTITLE] Invalid line count "${stId[3]}"`);
+    }
+
+    return true;
+}
+
+async function typeWriterAnim(id, textArray, duration, pauseTime) {
+    const st = document.getElementById(`st-${id}`);
+    const bx = document.getElementById(`bx-${id}`);
+    const f = document.getElementById(`f-${id}`);
+    const stId = id.split("-");
+    const fullText = textArray.join("");
+    f.innerHTML = fullText;
+    debug.log("[typeWriterAnim] Showing box:", bx, bx?.classList);
+    bx.classList.replace("hidden", "s-hidden");
+    bx.classList.add("trans");
+    bx.classList.remove("s-hidden")
+    const length = textArray.length;
+    if (length == 0) return;
+    let i;
+    let text = "";
+    let interval = duration/length;
+    for (i = 0; i < length; i++) {
+        text = `${text}${textArray[i]}`
+        st.innerHTML = text;
+        f.innerHTML = textRemove(fullText, i);
+        await pause(interval);
+    }
+    await pause(pauseTime);
+    debug.log("[typeWriterAnim] Hiding box:", bx, bx?.classList);
+    bx.classList.add("s-hidden");
+    await pause(200);
+    bx.classList.replace("s-hidden", "hidden");
+    bx.classList.remove("trans");
+    return
+}
+
+const textRemove = (text, i) => text.slice(i+1);
+
+function showTitle(){
+    if (title == "Mr. President" || title == "Ms. President") return title;
+    else return "President";
 }
