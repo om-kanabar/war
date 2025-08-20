@@ -260,9 +260,10 @@ class Param {
 }
 
 async function actualStart() {
-    const wake = document.getElementById("wake");
     await pause(1000);
     subtitle("2-0-t-1");
+    await pause(4000);
+    subtitle("2-1-t-1");
 }
 
 /*
@@ -385,3 +386,4 @@ function showTitle(){
     if (title == "Mr. President" || title == "Ms. President") return title;
     else return "President";
 }
+
